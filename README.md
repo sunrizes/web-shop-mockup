@@ -1,2 +1,2 @@
-# web-shop-mockup
+# Web Shop Mockup (Car Parts)
 Webshop project.
