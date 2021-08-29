@@ -1,0 +1,32 @@
+.wrapper {
+    background-color: green;
+    box-shadow: 2px 4px 12px lightgray;
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    img {
+        margin: 20px 20px ;
+    }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        
+        li {
+            display: inline;
+            margin-left: 20px;
+            a {
+                color: white;
+                text-decoration: none;
+                transition-duration: 0.2s;
+                &:hover {
+                    color: lightgray;
+                }
+            }
+          }
+      }
+      
+      
+}
