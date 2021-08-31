@@ -11,23 +11,23 @@ app.use(bodyParser.json());
 
 app.use(cors());
 
-app.route("/api/pets")
+app.route("/api/:entity")
     .get(controller.query)
-app.route("/api/pets/:id")
-    .get(controller.getOne)
+    .post(controller.save);
+app.route("/api/:entity/:id")
+    .get(controller.show)
+    .put(controller.update)
+    .delete(controller.remove);
 
-app.route("/api/adoptions")
-    .get(controller.getAdoptions)
-    .post(controller.postAdoption)
+app.route("/api/:entity/:entityId/:related")
+    .get(controller.queryRelationship)
+    .post(controller.saveRelationship);
+app.route("/api/:entity/:entityId/:related/:relatedId")
+    .get(controller.showRelationship)
+    .put(controller.updateRelationship)
+    .delete(controller.removeRelationship);
 
-app.route("/api/adoptions/:id")
-    .delete(controller.deleteAdoption)
 
-app.route("/api/categories")
-    .get(controller.getCategories);
-
-app.route("/api/reset")
-    .get(controller.resetPets);
 
 app.listen(3000, function() {
     console.log("Server started");

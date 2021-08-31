@@ -3,75 +3,64 @@
 var model = require("./model.js");
 
 module.exports.query = query;
-module.exports.getOne = getOne;
-module.exports.getAdoptions = getAdoptions;
-module.exports.postAdoption = postAdoption;
-module.exports.deleteAdoption = deleteAdoption;
-module.exports.getCategories = getCategories;
-module.exports.resetPets = resetPets;
+module.exports.save = save;
+module.exports.show = show;
+module.exports.update = update;
+module.exports.remove = remove;
 
-const petModelName = "pets"
-const adoptionModelName = "adoptions"
+module.exports.queryRelationship = queryRelationship;
+module.exports.saveRelationship = saveRelationship;
+module.exports.showRelationship = showRelationship;
+module.exports.updateRelationship = updateRelationship;
+module.exports.removeRelationship = removeRelationship;
 
 function query(req, res) {
-    model.load(petModelName, function(entities) {
-        console.log(req.query);
-        entities = filterDeleted(entities);
-        if(req.query.filter){
-            try {
-                req.query.filter = JSON.parse(req.query.filter);
-            } catch(e) {
-                console.log('invalid query');
+    if(req.params.entity == 'genres') {
+        model.load(req.params.entity, function(entities) {
+            res.status(200).json(entities);
+        });
+    } else {
+        model.load(req.params.entity, function(entities) {
+            if(req.query.sort) {
+                entities = sort(entities, req.query.sort, req.query.sortDirection);
             }
-            for(var key in req.query.filter) {
+            if(req.query.filter){
+                req.query.filter = JSON.parse(req.query.filter);
+            }
+            console.log(req.query);
+            for(var key in req.query.filter) {            
                 entities = entities.filter(function(obj) {
                     if(obj[key] !== undefined) {
                         return obj[key].toString().toLowerCase().indexOf(req.query.filter[key].toLowerCase()) > -1;
                     }
-                    return true;
+                    return false;
                 });
             }
-        }
-        var count = entities.length;
+            var count = entities.length;
+            entities = pagination(entities, req.query.page, req.query.pageSize);
 
-        if(req.query.sort) {
-            entities = sort(entities, req.query.sort, req.query.sortDirection);
-        }
-
-        res.status(200).json({count: count, results: entities});
-    });
-}
-
-function filterDeleted(entities) {
-    return entities.filter(function(obj) {
-        return !obj.deleted
-    })
-}
-
-function sort(array, field, sortDirection) {
-    if(sortDirection && sortDirection === 'desc') {
-        return array.sort(function(a, b) { return (a[field] > b[field]) ? -1 : ((b[field] > a[field]) ? 1 : 0); });
-    } else {
-        return array.sort(function(a, b) { return (a[field] > b[field]) ? 1 : ((b[field] > a[field]) ? -1 : 0); });
+            res.status(200).json({count: count, results: entities});
+        });    
     }
+    
 }
 
 function save(req, res) {
     // console.log(req);
-    model.load(modelName, function(entities) {
+    model.load(req.params.entity, function(entities) {
         var lastId = 1
         if(entities.length > 0){
-            lastId = parseInt(entities[entities.length-1]._id);
+            lastId = parseInt(entities[entities.length - 1]._id);
         }
         req.body._id = lastId + 1;
         entities.push(req.body);
-        model.save(modelName, entities);
+        model.save(req.params.entity, entities);
         res.status(200).json(req.body);
     });
 }
 
-function getOne(req, res) {
-    model.load(petModelName, function(entities) {
+function show(req, res) {
+    model.load(req.params.entity, function(entities) {
         for(var i = 0, n = entities.length; i < n; i++) {
             var elem = entities[i];
             if(req.params.id === elem._id.toString()) {
@@ -83,69 +72,136 @@ function getOne(req, res) {
     });
 }
 
+function update(req, res) {
+    model.load(req.params.entity, function(entities) {
+        for(var i = 0, n = entities.length; i < n; i++) {
+            var elem = entities[i];
+            if(req.params.id === elem._id.toString()) {
+                entities[i] = req.body;
+                model.save(req.params.entity, entities);
+                res.status(200).json(elem);
+                return;
+            }
+        }
+        res.status(404).json({});
+    });
+}
+
+function remove(req, res) {
+    model.load(req.params.entity, function(entities) {
+        for(var i = 0, n = entities.length; i < n; i++) {
+            var elem = entities[i];
+            if(req.params.id === elem._id.toString()) {
+                entities.splice(i, 1);
+                model.save(req.params.entity, entities);
+                res.status(200).json(elem);
+                return;
+            }
+        }
+        res.status(404).json({});
+    });
+}
+
+function sort(array, field, sortDirection) {
+    if(sortDirection && sortDirection === 'desc') {
+        return array.sort(function(a, b) { return (a[field] > b[field]) ? -1 : ((b[field] > a[field]) ? 1 : 0); });
+    } else {
+        return array.sort(function(a, b) { return (a[field] > b[field]) ? 1 : ((b[field] > a[field]) ? -1 : 0); });
+    }
+}
+
+function pagination(array, pageNumber, pageSize) {
+    pageNumber = pageNumber || 1
+    pageSize = pageSize || 50;
+
+    var endIndex = pageSize * pageNumber,
+        startIndex = endIndex - pageSize;
+    if(endIndex > array.length) {
+        return array.slice(startIndex);
+    }
+    return array.slice(startIndex, endIndex);
+}
 
 
-function getAdoptions(req, res) {
-    model.load(adoptionModelName, function(entities) {
-        entities = filterDeleted(entities);
+
+function queryRelationship(req, res) {
+    model.load(req.params.related, function(entities) {
+        console.log(req.query);
+        if(req.query.sort) {
+            entities = sort(entities, req.query.sort, req.query.sortDirection);
+        }
+        if(!req.query.filter) {
+            req.query.filter = {};
+        }
+        req.query.filter[req.params.entity] = req.params.entityId;
+        for(var key in req.query.filter) {
+            entities = entities.filter(function(obj) {
+                if(obj[key] !== undefined) {
+                    return obj[key].toString().toLowerCase().indexOf(req.query.filter[key].toLowerCase()) > -1;
+                }
+                return false;
+            });
+        }
         var count = entities.length;
+        entities = pagination(entities, req.query.page, req.query.pageSize);
+
         res.status(200).json({count: count, results: entities});
     });
-
 }
 
-function postAdoption(req, res) {
-    model.load(adoptionModelName, function(entities) {
+function saveRelationship(req, res) {
+    model.load(req.params.related, function(entities) {
         var lastId = 1
         if(entities.length > 0){
-            lastId = parseInt(entities[entities.length-1]._id);
+            lastId = parseInt(entities[entities.length - 1]._id);
         }
         req.body._id = lastId + 1;
+        req.body[req.params.entity] = req.params.entityId;
         entities.push(req.body);
-        model.save(adoptionModelName, entities);
+        model.save(req.params.related, entities);
         res.status(200).json(req.body);
     });
 }
 
-function deleteAdoption(req, res) {
-    model.load(adoptionModelName, function(entities) {
-        let petId = null;
-        for (let i in entities) {
-            if (entities[i]._id == req.params.id) {
-                entities[i].deleted = true;
-                petId = entities[i].petId
-                model.load(petModelName, function(petities) {
-                  for (let j in petities) {
-                      if (petities[j]._id == entities[i].petId) {
-                            petities[j].deleted = true;
-                            break;
-                      }
-                  } 
-                  model.save(petModelName, petities) 
-                })
-                break;
+function showRelationship(req, res) {
+    model.load(req.params.related, function(entities) {
+        for(var i = 0, n = entities.length; i < n; i++) {
+            var elem = entities[i];
+            if(req.params.relatedId === elem._id.toString() && req.params.entityId == elem[req.params.entity]) {
+                res.status(200).json(elem);
+                return;
             }
         }
-        for (let i in entities) {
-            if (entities[i].petId == petId) {
-                entities[i].deleted = true;
-            }
-        }
-        model.save(adoptionModelName, entities);
-        res.status(200).json(req.body);
+        res.status(404).json({});
     });
 }
 
-function resetPets(req, res) {
-    model.load(petModelName, function(entities){
-        for (let i in entities) {
-            delete entities[i].deleted
+function updateRelationship(req, res) {
+    model.load(req.params.related, function(entities) {
+        for(var i = 0, n = entities.length; i < n; i++) {
+            var elem = entities[i];
+            if(req.params.relatedId === elem._id.toString() && req.params.entityId == elem[req.params.entity]) {
+                entities[i] = req.body;
+                model.save(req.params.related, entities);
+                res.status(200).json(elem);
+                return;
+            }
         }
-        model.save(petModelName, entities)
-        res.status(200).json({});
-    })
+        res.status(404).json({});
+    });
 }
 
-function getCategories(req, res) {
-    res.status(200).json(["dog", "cat", "other"])
+function removeRelationship(req, res) {
+    model.load(req.params.related, function(entities) {
+        for(var i = 0, n = entities.length; i < n; i++) {
+            var elem = entities[i];
+            if(req.params.relatedId === elem._id.toString() && req.params.entityId == elem[req.params.entity]) {
+                entities.splice(i, 1);
+                model.save(req.params.related, entities);
+                res.status(200).json(elem);
+                return;
+            }
+        }
+        res.status(404).json({});
+    });
 }
