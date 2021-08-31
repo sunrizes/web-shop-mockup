@@ -1,7 +1,7 @@
 {
     "parts": [
         {
-            "_id":1,
+            "id":1,
             "title":"Audi A4 prednji farovi",
             "description":"Audi A4 prednji farovi, novi, povoljno.",
             "make": "Audi",
@@ -13,7 +13,7 @@
             "state": "Novo"
         },
         {
-            "_id":2,
+            "id":2,
             "title":"passat b5 ceo auto u delovima",
             "description":"passat b5 ceo u delovima, stranac garancija za delove 0672495692",
             "make": "Volkswagen",

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Part } from '../models/part.model';
 
-const baseURL = "http://localhost:3000/";
+const baseURL = "https://my-json-server.typicode.com/sunrizes/web-shop-mockup/";
 
 @Injectable({
   providedIn: 'root'

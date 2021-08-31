@@ -1,0 +1,24 @@
+.wrapper {
+    border: 2px solid green;
+    border-radius: 10px;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+    flex-flow: row wrap;
+    width: 50%;
+    
+    .desc {
+        margin-left: 20px;
+        display: flex;
+        flex-flow: column wrap;
+
+        h2 {
+            color: green;
+        }
+    }
+    
+
+    img {
+        width: 100px;
+    }
+}
