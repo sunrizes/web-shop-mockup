@@ -1,21 +1,23 @@
 export class Part {
     _id: number;
-    title: string;
-    brand: string;
-    category: string;
-	price: number;
+	title: string;
 	description: string;
+	make: string;
+	model: string;
+	price: number;
+	location: string;
 	phone: string;
-	image: string;
+	state: string;
 
     constructor(obj?:any) {
         this._id = obj && obj._id || null;
         this.title = obj && obj.title || "";
-        this.brand = obj && obj.brand || "";
-        this.category = obj && obj.category || "";
-        this.price = obj && obj.price || "";
         this.description = obj && obj.description || "";
+        this.make = obj && obj.make || "";
+        this.model = obj && obj.model || "";
+        this.price = obj && obj.price || "";
+        this.location = obj && obj.location || "";
         this.phone = obj && obj.phone || "";
-        this.image = obj && obj.image || "";
+        this.state = obj && obj.state || "";
     }
 }
