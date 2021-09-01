@@ -1,0 +1,15 @@
+.wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    margin-top: 150px;
+
+    h1 {
+        color: #51de00;
+    }
+    
+    #price {
+        color: red;
+        font-weight: bold;
+    }
+}

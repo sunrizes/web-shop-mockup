@@ -1,10 +1,10 @@
 <div class="wrapper">
     <img src="../../../assets/images/{{item.make}}.png"/>
     <div class="desc">
-        <h2>{{item.title}}</h2>
-        <p><b>Marka:</b> {{item.make}}</p>
-        <p><b>Opis:</b> {{item.description}}</p>
-        <p><b>Lokacija:</b> {{item.location}}</p>
+        <h2 [routerLink]="['/shop', item.id]">{{item.title}}</h2>
+        <span><b>Marka:</b> {{item.make}}</span>
+        <span><b>Opis:</b> {{item.description}}</span>
+        <span><b>Lokacija:</b> {{item.location}}</span>
     </div>
 </div>
 

@@ -1,3 +1,5 @@
-<div *ngFor="let item of partList" class="wrapper">
-    <app-shop-item [item]="item"></app-shop-item>
+<div class="wrapper">
+    <div *ngFor="let item of partList">
+        <app-shop-item [item]="item"></app-shop-item>
+    </div>
 </div>

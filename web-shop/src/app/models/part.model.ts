@@ -10,7 +10,7 @@ export class Part {
 	state: string;
 
     constructor(obj?:any) {
-        this.id = obj && obj._id || null;
+        this.id = obj && obj.id || null;
         this.title = obj && obj.title || "";
         this.description = obj && obj.description || "";
         this.make = obj && obj.make || "";

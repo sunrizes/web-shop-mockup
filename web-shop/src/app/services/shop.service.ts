@@ -16,6 +16,12 @@ export class ShopService {
   getAllParts(): Observable<Part[]> {
     return this.http.get(baseURL + 'parts').pipe(map((data:any) => {
       return data.map(x => new Part(x));
-    }))
+    }));
+  }
+
+  getSinglePart(id: number): Observable<Part> {
+    return this.http.get(baseURL + 'parts/' + id).pipe(map(data => {
+      return new Part(data);
+    }));
   }
 }
