@@ -2,6 +2,7 @@
     <img src="../../../assets/images/{{item.make}}.png"/>
     <div class="desc">
         <h2 [routerLink]="['/shop', item.id]">{{item.title}}</h2>
+        <h3><b>Cena:</b> {{item.price}} &euro;</h3>
         <span><b>Marka:</b> {{item.make}}</span>
         <span><b>Opis:</b> {{item.description}}</span>
         <span><b>Lokacija:</b> {{item.location}}</span>

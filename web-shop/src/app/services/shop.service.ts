@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Part } from '../models/part.model';
 
-const baseURL = "https://my-json-server.typicode.com/sunrizes/web-shop-mockup/";
+const baseURL = "http://localhost:3000/";
 
 @Injectable({
   providedIn: 'root'
@@ -12,11 +12,17 @@ const baseURL = "https://my-json-server.typicode.com/sunrizes/web-shop-mockup/";
 export class ShopService {
 
   constructor(private http: HttpClient) { }
-
-  getAllParts(): Observable<Part[]> {
-    return this.http.get(baseURL + 'parts').pipe(map((data:any) => {
-      return data.map(x => new Part(x));
-    }));
+  getAllParts(make?:string): Observable<Part[]> {
+    if(make) {
+      return this.http.get(baseURL + 'parts/?make=' + make).pipe(map((data:any) => {
+        return data.map(x => new Part(x));
+      }));
+    } else {
+      return this.http.get(baseURL + 'parts').pipe(map((data:any) => {
+        return data.map(x => new Part(x));
+      }));
+    }
+    
   }
 
   getSinglePart(id: number): Observable<Part> {

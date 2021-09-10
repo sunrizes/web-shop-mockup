@@ -17,8 +17,12 @@ export class ShopComponent implements OnInit {
     this.getParts();
   }
 
-  getParts(): void {
-    this.service.getAllParts().subscribe(
+  getPartsSelect(make:string): void {
+    this.getParts(make);
+  }
+
+  getParts(make?:string): void {
+    this.service.getAllParts(make).subscribe(
       data => {
         this.partList = data;
         console.log(this.partList);
