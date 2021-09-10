@@ -10,6 +10,10 @@ import { ShopService } from '../services/shop.service';
 export class ShopComponent implements OnInit {
 
   partList: Part[];
+  carList: string[] = ["Alfa Romeo", "Audi", "BMW", "Chevrolet", "Citroen", "Dacia", "Daewoo", "Daihatsu",
+  "Fiat", "Ford", "Honda", "Hyundai", "Infiniti", "Kia", "Lada", "Lancia", "Land Rover", "Mazda", "Mercedes Benz",
+  "Mini", "Mitsubishi", "Nissan", "Opel", "Peugeot", "Renault", "Saab", "Seat", "Skoda", "Smart", "Subaru", "Suzuki",
+  "Tata", "Toyota", "Volkswagen", "Volvo", "Zastava"];
 
   constructor(private service: ShopService) { }
 

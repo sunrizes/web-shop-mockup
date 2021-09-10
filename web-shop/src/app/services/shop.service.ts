@@ -12,6 +12,7 @@ const baseURL = "http://localhost:3000/";
 export class ShopService {
 
   constructor(private http: HttpClient) { }
+
   getAllParts(make?:string): Observable<Part[]> {
     if(make) {
       return this.http.get(baseURL + 'parts/?make=' + make).pipe(map((data:any) => {
@@ -27,6 +28,12 @@ export class ShopService {
 
   getSinglePart(id: number): Observable<Part> {
     return this.http.get(baseURL + 'parts/' + id).pipe(map(data => {
+      return new Part(data);
+    }));
+  }
+
+  addNewPart(part: Part): Observable<Part> {
+    return this.http.post(baseURL + 'parts', part).pipe(map(data => {
       return new Part(data);
     }));
   }

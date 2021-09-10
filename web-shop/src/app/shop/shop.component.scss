@@ -4,4 +4,13 @@
     justify-content: center;
     align-items: center;
     margin-top: 50px;
+
+    select {
+        border-radius: 10px;
+        border: 2px solid #51de00;
+        padding: 10px 10px;
+        color: white;
+        background-color: #51de00;
+        margin-bottom: 20px;
+    }
 }

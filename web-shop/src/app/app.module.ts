@@ -9,6 +9,7 @@ import { HomeComponent } from './home/home.component';
 import { ShopComponent } from './shop/shop.component';
 import { ShopItemComponent } from './shop/shop-item/shop-item.component';
 import { ShopItemInfoComponent } from './shop-item-info/shop-item-info.component';
+import { ShopItemFormComponent } from './shop/shop-item-form/shop-item-form.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ShopItemInfoComponent } from './shop-item-info/shop-item-info.component
     HomeComponent,
     ShopComponent,
     ShopItemComponent,
-    ShopItemInfoComponent
+    ShopItemInfoComponent,
+    ShopItemFormComponent
   ],
   imports: [
     BrowserModule,

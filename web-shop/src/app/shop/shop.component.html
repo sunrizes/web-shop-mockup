@@ -1,7 +1,7 @@
 <div class="wrapper">
-    <select (change)="getPartsSelect($event.target.value)">
-        <option>Audi</option>
-        <option>Volkswagen</option>
+    <label for="Marka">Marka:</label>
+    <select name="Marka" (change)="getPartsSelect($event.target.value)">
+        <option *ngFor="let car of carList">{{car}}</option>
     </select>
     <div *ngFor="let item of partList">
         <app-shop-item [item]="item"></app-shop-item>
